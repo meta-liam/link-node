@@ -1,0 +1,26 @@
+{
+    "name": "link-node",
+    "version": "1.0.0",
+    "description": "",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc -p ./tsconfig.json",
+        "test": "jest",
+        "test:coverage": "jest --coverage"
+    },
+    "files": [
+        "dist/*"
+    ],
+    "dependencies": {
+        "@makeblock/xlink-rpc": "^0.1.1"
+    },
+    "author": "liam",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/jest": "^27.4.0",
+        "jest": "^27.5.1",
+        "jest-websocket-mock": "^2.3.0",
+        "ts-jest": "^27.1.3",
+        "typescript": "^4.5.5"
+    }
+}
