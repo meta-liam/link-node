@@ -68,6 +68,7 @@ class Message {
         this._openRequests.clear();
         this._callbackListeners.clear();
     }
+
     /**
      * 设置返回值
      * @param {number} requestID
@@ -82,12 +83,12 @@ class Message {
     /**
      * 返回发送的报文
      */
-    getRequestMessage(method: string, params: any[], service?: string,id:number=-1):IRequestMessage {
+    getRequestMessage(method: string, params: any, service?: string,id:number=-1):IRequestMessage {
         if (!method) {
             return null;
         }
         let requestID = this._requestID++;
-        if (id > 0) requestID = id;
+        if (id >= 0) requestID = id;
         let transformedParams;
         if (Array.isArray(params)) {
             transformedParams = params.map((param: any) => {
@@ -99,6 +100,7 @@ class Message {
                 return param;
             });
         }else{
+          if (!params) params = "";
             transformedParams = params;
         }
         return this._getRequestMessage(method, transformedParams, requestID, service);
@@ -132,9 +134,6 @@ class Message {
    */
  handleMessage( message: IRequestMessage | IResponseMessage ):any {
     if (message.jsonrpc !== "2.0") {
-    //   throw new Error(
-    //     `Bad or missing JSON-RPC version in message: ${JSON.stringify(message)}`
-    //   );
       return { flag:"error",message}
     }
     if (message.hasOwnProperty("method")) {
@@ -156,7 +155,7 @@ class Message {
     _handleResponse(message: IResponseMessage) {
         const { result, error, id } = message;
         const openRequest = this._openRequests.get(id);
-        this._openRequests.delete(id);
+        if (id > 0) this._openRequests.delete(id);
         if (openRequest) {
             if (error) {
             openRequest.reject(error);
