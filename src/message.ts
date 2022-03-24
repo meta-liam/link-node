@@ -138,14 +138,14 @@ class Message {
       return { flag: "error", message }
     }
     if (message.hasOwnProperty("method")) {
-      //this._handleRequest(message as IRequestMessage);// 循环发信息
-      return { flag: "hasMethod", message }
+      // server主动请求Client中的方法
+      return { flag: "data", message }
     } else if (message["type"] === this.CallbackResponse) {
       this._handleCallback(message);//callBack的
-      return { flag: "callback" }
+      return { flag: "callback",message }
     } else {
       this._handleResponse(message);//普通返回result
-      return { flag: "result" }
+      return { flag: "result",message }
     }
   }
 

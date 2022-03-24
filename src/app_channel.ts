@@ -14,7 +14,7 @@ class AppChannel {
     _global.setLinkCallBack(this.callBack);
   }
 
-  callServer(jsonrpc: any = {}) {
+  send(jsonrpc: any = {}) {
     let data: string;
     if (typeof jsonrpc === "object") {
       data = JSON.stringify(jsonrpc);

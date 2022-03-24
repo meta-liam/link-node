@@ -1,18 +1,18 @@
 import { getPlatform } from './utils'
-import {Platform,Device} from './enum'
+import { Platform, Device } from './enum'
 import AppChannel from './app_channel'
 import PcChannel from './pc_channel';
-import Message from './message'
+import Message  from './message'
 
 class LinkChannel {
-  private app: AppChannel = new AppChannel();
-  private pc: PcChannel = new PcChannel();
-  private msg: Message = new Message();
+  app: AppChannel = new AppChannel();
+  pc: PcChannel = new PcChannel();
+  msg: Message = new Message();
   public handleClientMessage: any = null;// 发回client的消息
   // config
   Config: any = {
-    PC:{ port: 52384,host: '127.0.0.1'} ,
-    APP:{ device:Device.auto},
+    PC: { port: 52384, host: '127.0.0.1' },
+    APP: { device: Device.auto },
     platform: Platform.auto
   };
 
@@ -21,7 +21,7 @@ class LinkChannel {
   }
 
   init() {
-    if(this.Config.platform ==Platform.auto ) this.Config.platform = getPlatform();
+    if (this.Config.platform == Platform.auto) this.Config.platform = getPlatform();
     if (this.Config.platform == Platform.app) {
       this.app.init(this.Config.APP.device);
       this.app.setHandle(this._handleMessage)
@@ -31,6 +31,7 @@ class LinkChannel {
     }
   }
 
+  // TODO test
   send(method: string, params: any[], service?: string, id: number = -1): any {
     const request = this.msg.getRequestMessage(method, params, service, id);
     if (!request) {
@@ -39,12 +40,12 @@ class LinkChannel {
     const promise = new Promise((resolve, reject) => {
       this.msg._openRequests.set(request.id, { resolve, reject });
     });
-    this.callServer(request);
+    this.sendRPC(request);
     return promise;
   }
 
   close() {
-    this.handleClientMessage =null;
+    this.handleClientMessage = null;
     if (this.Config.platform == Platform.app) {
       this.app.close();
     } else {
@@ -53,24 +54,25 @@ class LinkChannel {
     this.msg.clear();
   }
 
-  callServer(jsonrpc: any = {}) {
+  sendRPC(jsonrpc: any = {}) {
     if (this.Config.platform == Platform.app) {
-      this.app.callServer(jsonrpc)
+      this.app.send(jsonrpc)
     } else {
-      this.pc.callServer(jsonrpc)
+      this.pc.send(jsonrpc)
     }
   }
 
+  // TODO test
   _handleMessage(v: any) {
     console.log("[client]_handleMessage:", v);
+    if (!this.handleClientMessage){
+      return false;
+    }
     const data = JSON.parse(v);
     const res = this.msg.handleMessage(data);
-    if (res.flag === "hasMethod") { // server主动请求Client中的方法
-      //const { method, params, id, server } = res.message;
-      //this.send(method, params, server, id);
-      if(this.handleClientMessage) this.handleClientMessage({"type":"data",data:res.message});
-    }
+    this.handleClientMessage({ "type": res.flag, data: res.message });
     console.log("result:", res);
+    return true;
   }
 
   setHandle(handle: any) {

@@ -8,14 +8,17 @@ class PcChannel {
     host: '127.0.0.1',
   };
   connected: boolean = false;
-  // pc
+
+  constructor() {
+  }
+
   init(port: number = this.config.port, host: string = this.config.host, autoConnect: boolean = true) {
     if (port != this.config.port) this.config.port = port;
     if (host != this.config.host) this.config.host = host;
     if (autoConnect) this.connect();
   }
 
-  callServer(jsonrpc: any = {}) {
+  send(jsonrpc: any = {}) {
     if (this.connected) {
       let data: string;
       if (typeof jsonrpc === "object") {

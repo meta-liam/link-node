@@ -28,7 +28,7 @@ describe("pc_client:", () => {
     client.connected = true;
     client.wsClient = mockClient;
     client.wsClient.send = jest.fn();
-    client.callServer(tsJsonrpc);
+    client.send(tsJsonrpc);
     expect(client.wsClient.send).toBeCalled();
   });
 
@@ -36,7 +36,7 @@ describe("pc_client:", () => {
     client.connected = true;
     client.wsClient = mockClient;
     client.wsClient.send = jest.fn();
-    client.callServer(JSON.stringify(tsJsonrpc));
+    client.send(JSON.stringify(tsJsonrpc));
     expect(client.wsClient.send).toBeCalled();
   });
 
@@ -119,7 +119,7 @@ describe("pc_client:", () => {
     let client2 = new PcChannel();
     let connect = await client2.connect(mockClient2);
     expect(connect).toEqual(true);
-    client2.callServer("hello");
+    client2.send("hello");
     await expect(mockServer2).toReceiveMessage("hello");
     expect(mockServer2).toHaveReceivedMessages(["hello"]);
 
@@ -140,7 +140,7 @@ describe("pc_client:", () => {
     expect(connect).toEqual(true);
     let st = '{"jsonrpc":"2.0","method":"say","params":"liam","id":1,"service":"hello-world"}';
     let back = '{"jsonrpc":"2.0","id":1,"result":"hi,liam"}';
-    client2.callServer(st);
+    client2.send(st);
     await expect(mockServer2).toReceiveMessage(st);
     expect(mockServer2).toHaveReceivedMessages([st]);
     mockClient2.onmessage = (e) => {

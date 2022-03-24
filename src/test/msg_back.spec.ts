@@ -53,7 +53,7 @@ describe("常用返回的消息 Message", () => {
     let msg = new Message();
     let res = { "jsonrpc": "2.0", "method": "say", "id": 1, "params": ["hi"] }
     let handle = msg.handleMessage(res as any);
-    expect(handle.flag).toEqual("hasMethod");
+    expect(handle.message.method).toEqual("say");
     //console.log("v:", JSON.stringify(handle));
   });
 

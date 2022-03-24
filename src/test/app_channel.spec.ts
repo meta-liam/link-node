@@ -37,14 +37,14 @@ describe("app_client:", () => {
 
   it("callServer:obj", () => {
     global.linkCallMobileNative = jest.fn();
-    let v = client.callServer(tsJsonrpc);
+    let v = client.send(tsJsonrpc);
     expect(global.linkCallMobileNative).toBeCalled();
     //console.log("v:",v);
   });
 
   it("callServer:string", () => {
     global.linkCallMobileNative = jest.fn();
-    let v = client.callServer(JSON.stringify(tsJsonrpc));
+    let v = client.send(JSON.stringify(tsJsonrpc));
     expect(global.linkCallMobileNative).toBeCalled();
     //console.log("v:",v);
   });
