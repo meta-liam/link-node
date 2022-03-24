@@ -1,6 +1,9 @@
 import AppChannel from '../app_channel'
 
+
 describe("app_client:", () => {
+  const _global = ( global /* node */) as any
+  //_global.window = null;
   let client = new AppChannel();
   let tsJsonrpc = { "jsonrpc": "2.0", "method": "say", "params": "liam", "id": 1, "service": "hello-world" }
 

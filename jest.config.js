@@ -13,4 +13,5 @@ module.exports = {
     '<rootDir>/extension/*/test/*.{spec,test}.{js,ts}',
   ],
   preset: 'ts-jest',
+  testEnvironment: 'jest-environment-jsdom',
 };

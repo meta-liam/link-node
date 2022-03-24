@@ -8,8 +8,12 @@ export const getPlatform = (): string => {
   else return Platform.pc;
 };
 
-export const getDevice = () => {
-    var ua = navigator.userAgent as any ;
+export const getDevice = (userAgent:any=null) => {
+  var ua :any ;
+    if (userAgent){
+      ua = userAgent as any;
+    }
+    else ua = navigator.userAgent as any ;
     let isWindowsPhone = /(?:Windows Phone)/.test(ua),
     isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone,
     isAndroid = /(?:Android)/.test(ua),

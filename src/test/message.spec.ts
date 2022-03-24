@@ -33,7 +33,7 @@ describe("Message", () => {
     let msg = new Message();
     let res = msg.getErrorResponseMessage(1, ErrorCode.ParseError, "");
     expect(res.error.code).toEqual(ErrorCode.ParseError);
-    console.log("v:", JSON.stringify(res));
+    //console.log("v:", JSON.stringify(res));
   });
 
   // handleMessage 在另外文件

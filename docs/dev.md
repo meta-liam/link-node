@@ -36,3 +36,8 @@ npm publish
 
 ## 参考文档
 
+
+## 问题
+
+解决浏览器环境：
+  testEnvironment: 'jest-environment-jsdom'

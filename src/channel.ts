@@ -21,9 +21,9 @@ class LinkChannel {
   }
 
   init() {
-    this.Config.platform = getPlatform();
+    if(this.Config.platform ==Platform.auto ) this.Config.platform = getPlatform();
     if (this.Config.platform == Platform.app) {
-      this.app.init();
+      this.app.init(this.Config.APP.device);
       this.app.setHandle(this._handleMessage)
     } else {
       this.pc.init(this.Config.PC.port, this.Config.PC.host);
