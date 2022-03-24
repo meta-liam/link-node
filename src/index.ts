@@ -62,16 +62,19 @@ class LinkChannel {
     }
   }
 
-  // TODO test
-  _handleMessage(v: any) {
-    console.log("[client]_handleMessage:", v);
+  _handleMessage(v: string) {
+    //console.log("[client]_handleMessage:", v);
     if (!this.handleClientMessage){
+      return false;
+    }
+    if (!v || v.indexOf("jsonrpc") == -1) {
+      this.handleClientMessage({ "type": "error", data: v });
       return false;
     }
     const data = JSON.parse(v);
     const res = this.msg.handleMessage(data);
     this.handleClientMessage({ "type": res.flag, data: res.message });
-    console.log("result:", res);
+    //console.log("result:", res);
     return true;
   }
 

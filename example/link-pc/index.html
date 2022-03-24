@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>h5-demo</title>
+<style>
+  .envBox span{ padding-left: 6px; font-size:14;color: red;}
+  .buttonBox button{ padding-left: 6px;line-height: 150%;}
+  body{font-size: 12px;}
+  .OutBox{overflow-y: scroll;width: 90%; height:250px;border: dashed red;}
+</style>
+  </head>
+  <body>
+    <h1>h5-xlink-demo</h1>
+    <div class="envBox">
+      运行环境：<br>
+    </div>
+    <div class="buttonBox">
+      <button id="ts01" >hello</button>
+      <button id="tsCloseWs" >关闭ws</button>
+      <button id="tsLoadWs" >创建ws</button>
+      <button id="tsSayHello" >hello-world.say</button>
+      <button id="tsGetList" >discovery.getNetList</button>
+
+    </div>
+
+    <br>
+    输入：<button id="tsSend" >发送</button>
+    <br>
+
+<textarea id="msgInput" rows="5" cols="60">{"jsonrpc":"2.0","method":"say","params":"liam","id":1,"service":"hello-world"}</textarea>
+<br>
+输出<br>
+
+<div id="msgOutput" class="OutBox">
+  output..
+</div>
+ <script src="../../dist/index.js" ></script>
+<script>
+console.log("---------0000-----------324");
+
+//const _link = new LinkChannel(); //require("../../dist/index");
+
+//const _link2 = require("../../dist/index.js");
+
+console.log(LinkChannel);
+
+var ws;
+var inputMsg = document.getElementById("msgInput");
+var outMsg = document.getElementById("msgOutput");
+
+function showLog(v) {
+    let date = new Date();
+    let pre = "[" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "] ";
+    v = pre + v;
+    console.log("log:", v);
+    outMsg.innerHTML = v + "<br>" + outMsg.innerHTML;
+}
+
+function loadWs() {
+    console.log("loadWs!")
+    ws = new WebSocket("ws://localhost:8888");//52384
+
+    ws.onopen = function (evt) {
+        console.log("Connection open ...");
+        //ws.send('{"jsonrpc":"2.0","method":"getNetList","params":[],"id":0,"service":"discovery"}');
+    };
+
+    ws.onmessage = function (evt) {
+        // console.log( "Received Message: " + evt.data);
+        // ws.close();
+        showLog(evt.data)
+    };
+
+    ws.onclose = function (evt) {
+        console.log("Connection closed.");
+    };
+}
+function callBack(v) {
+    console.log("callBack:", v);
+}
+
+function getList() {
+    ws.send('{"jsonrpc":"2.0","method":"getNetList","params":[],"id":0,"service":"discovery"}');
+}
+function sayHello() {
+    ws.send('{"jsonrpc":"2.0","method":"say","params":"liam","id":1,"service":"hello-world"}');
+    //replay
+    //  hello-world send: {"jsonrpc":"2.0","id":1,"result":'hi,liam'}
+}
+
+function helloCallBack() {
+    ws.send('{"jsonrpc":"2.0","method":"askAndAnswer","params":["liam",{"type":"JSON_RPC_CALLBACK","id":1}],"id":1,"service":"hello-world"}');
+    //replay
+    //worker._sendMessage] hello-world send: {"jsonrpc":"2.0","type":"JSON_RPC_CALLBACK","id":1,"params":["Ask: liam\nAnswer: Sorry, I don't know."]}
+    //[worker._sendMessage] hello-world send: {"jsonrpc":"2.0","id":1,"result":null}
+}
+function helloListen() {
+    ws.send('{"jsonrpc":"2.0","method":"listen","params":[{"type":"JSON_RPC_CALLBACK","id":0}],"id":0,"service":"hello-world"}');
+    //很多回复
+    //[worker._sendMessage] hello-world send: {"jsonrpc":"2.0","type":"JSON_RPC_CALLBACK","id":0,"params":["Hello world 50"]}
+}
+
+document.getElementById("ts01").addEventListener('click', function () {
+    showLog("hello!");
+});
+
+document.getElementById("tsLoadWs").addEventListener('click', function () {
+    loadWs();
+});
+
+document.getElementById("tsSayHello").addEventListener('click', function () {
+    sayHello();
+});
+
+document.getElementById("tsGetList").addEventListener('click', function () {
+    getList();
+});
+
+document.getElementById("tsCloseWs").addEventListener('click', function () {
+    ws.close();
+});
+
+document.getElementById("tsSend").addEventListener('click', function () {
+    var v = inputMsg.value;
+    ws.send(v);
+});
+
+    </script>
+<br>
+操作：点击"创建ws"->点击"hello-world.say"
+<br>
+注意：
+<br>1.要关闭防火墙；
+<br>2.日志在 ～/.xlink/log ;
+  </body>
+</html>

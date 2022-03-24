@@ -169,6 +169,7 @@ class Message {
   /**
    * 处理 callback
    * 不作删除,会有多次callback：this._callbackListeners.delete(id)
+   * 注意： id 返回为 callbackID
    * @param message
    */
   _handleCallback(message: IResponseMessage) {
