@@ -1,6 +1,6 @@
 import { Device, getDevice } from './utils'
-import AppClient from './app_client'
-import PcClient from './pc_client';
+import AppChannel from './app_channel'
+import PcChannel from './pc_channel';
 import Message from './message'
 
 let Config = {
@@ -8,10 +8,10 @@ let Config = {
   host: '127.0.0.1',
 };
 
-class LinkClient {
+class LinkChannel {
   private device: Device = Device.PC;
-  private app: AppClient = new AppClient();
-  private pc: PcClient = new PcClient();
+  private app: AppChannel = new AppChannel();
+  private pc: PcChannel = new PcChannel();
   private msg: Message = new Message();
   constructor(autoInit: boolean = true) {
     if (autoInit) this.init();
@@ -48,6 +48,7 @@ class LinkClient {
     } else {
       this.pc.close();
     }
+    this.msg.clear();
   }
 
   callServer(jsonrpc: any = {}) {
@@ -76,5 +77,5 @@ class LinkClient {
 
 }
 
-export default LinkClient;
-module.exports = LinkClient;
+export default LinkChannel;
+module.exports = LinkChannel;

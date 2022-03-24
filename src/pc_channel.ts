@@ -1,6 +1,6 @@
 
 
-class PcClient {
+class PcChannel {
   public handleMessage: any = null; //只支持1个
   wsClient: WebSocket; //wsClient
   config: any = {
@@ -25,7 +25,7 @@ class PcClient {
         data = jsonrpc;
       }
       this.wsClient.send(data);
-      console.log("callServer:", data);
+      //console.log("callServer:", data);
     }
   }
 
@@ -133,4 +133,4 @@ class PcClient {
   }
 }
 
-export default PcClient;
+export default PcChannel;

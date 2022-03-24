@@ -1,6 +1,6 @@
 
 const _global: any = (global /* node */ || window /* browser */) as any;
-class AppClient {
+class AppChannel {
   public handleMessage: any = null;
   device: string = "auto";//设备: auto , ios, android 3个值，默认auto
   constructor() {
@@ -46,4 +46,4 @@ class AppClient {
 
 }
 
-export default AppClient;
+export default AppChannel;

@@ -49,7 +49,7 @@ describe("Message", () => {
     expect(msg._openRequests.size).toEqual(1);
     expect(openRequest).toBeUndefined();
     msg._openRequests.delete(id + 1);
-  })
+  });
 
   it("_openRequests:操作2", () => {
     let msg = new Message();
@@ -62,7 +62,19 @@ describe("Message", () => {
     // console.log("v",msg._openRequests);
     // console.log("v",openRequest);
     expect(msg._openRequests.size).toEqual(0);
-  })
+  });
 
+  it("getRequestMessage:操作2", () => {
+    let msg = new Message();
+    let id = 199;
+    let back = { "jsonrpc": "2.0", "id": id, "result": 'hi,liam' }
+    let req = msg.getRequestMessage("say", "hi", "", id);
+    const promise = new Promise((resolve, reject) => {
+      msg._openRequests.set(id, { resolve, reject });
+    });
+    msg._handleResponse(back as any);
+    //console.log("v:",promise);
+    expect(promise).resolves;
+  });
 
 });
