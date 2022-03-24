@@ -1,48 +1,48 @@
 
-const _global :any= ( global /* node */ || window /* browser */ ) as any ;
+const _global: any = (global /* node */ || window /* browser */) as any;
 class AppClient {
-    public handleMessage:any = null;
-    device:string = "auto" ;//设备: auto , ios, android 3个值，默认auto
-    constructor() {
-    }
+  public handleMessage: any = null;
+  device: string = "auto";//设备: auto , ios, android 3个值，默认auto
+  constructor() {
+  }
 
-    init(device:string = "auto"){
-        if (this.device != device){
-            this.device = device;
-        }
-        _global.setLinkCallBack(this.callBack) ;
+  init(device: string = "auto") {
+    if (this.device != device) {
+      this.device = device;
     }
-    
-    callServer(jsonrpc:any={}){
-        let data:string ;
-        if (typeof jsonrpc === "object") {
-            data = JSON.stringify(jsonrpc);
-        }
-        else {
-            data = jsonrpc;
-        }
-        if (_global.linkCallMobileNative){
-            _global.linkCallMobileNative(data,this.device);
-        }
-    }
+    _global.setLinkCallBack(this.callBack);
+  }
 
-    close(){
-        if (_global.setLinkCallBack){
-            _global.setLinkCallBack(null) ;
-        }
-        this.handleMessage = null;
+  callServer(jsonrpc: any = {}) {
+    let data: string;
+    if (typeof jsonrpc === "object") {
+      data = JSON.stringify(jsonrpc);
     }
+    else {
+      data = jsonrpc;
+    }
+    if (_global.linkCallMobileNative) {
+      _global.linkCallMobileNative(data, this.device);
+    }
+  }
 
-    callBack(v:string){
-        console.log("callBackFromApp:",v);
-        if (this.handleMessage){
-            this.handleMessage(v);
-        }
+  close() {
+    if (_global.setLinkCallBack) {
+      _global.setLinkCallBack(null);
     }
+    this.handleMessage = null;
+  }
 
-    setHandle(handle:any){
-        this.handleMessage = handle;
+  callBack(v: string) {
+    console.log("callBackFromApp:", v);
+    if (this.handleMessage) {
+      this.handleMessage(v);
     }
+  }
+
+  setHandle(handle: any) {
+    this.handleMessage = handle;
+  }
 
 }
 

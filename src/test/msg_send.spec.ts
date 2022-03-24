@@ -4,18 +4,18 @@ import Message from "../message";
 describe("常用发送消息 Message", () => {
 
     it("getRequestMessage:say 1",()=>{
-        //{"jsonrpc":"2.0","method":"say","params":"liam","id":1,"service":"hello-world"}
+        //{"jsonrpc":"2.0","method":"say","params":"liam","id":199,"service":"hello-world"}
         let msg = new Message();
         let req = msg.getRequestMessage("say",'liam',"hello-world");
         expect(req.params).toEqual('liam');
-        //console.log("v:",JSON.stringify(req));
+        console.log("v:",JSON.stringify(req));
     });
 
     it("getRequestMessage:say 2",()=>{
         //{"jsonrpc":"2.0","method":"say","params":"","id":1,"service":"hello-world"}
         let msg = new Message();
         let req = msg.getRequestMessage("say",'',"hello-world");
-        expect(req.params).toEqual('');
+        expect(req.method).toEqual('say');
         //console.log("v:",JSON.stringify(req));
     });
 
@@ -23,7 +23,7 @@ describe("常用发送消息 Message", () => {
         // {"jsonrpc":"2.0","method":"say","params":"","id":1,"service":"hello-world"}
         let msg = new Message();
         let req = msg.getRequestMessage("say",null,"hello-world");
-        expect(req.params).toEqual('');
+        expect(req.method).toEqual('say');
         //console.log("v:",JSON.stringify(req));
     });
 
@@ -36,19 +36,19 @@ describe("常用发送消息 Message", () => {
     });
 
     it("getRequestMessage:askAndAnswer",()=>{
-        // {"jsonrpc":"2.0","method":"askAndAnswer","params":["ask",{"type":"JSON_RPC_CALLBACK","id":1}],"id":1,"service":"hello-world"}
+        // {"jsonrpc":"2.0","method":"askAndAnswer","params":["ask",{"type":"JSON_RPC_CALLBACK","id":188}],"id":199,"service":"hello-world"}
         let msg = new Message();
         let req = msg.getRequestMessage("askAndAnswer",["ask",jest.fn()],"hello-world");
         expect(req.method).toEqual("askAndAnswer");
-        //console.log("v:",JSON.stringify(req));
+        console.log("v:",JSON.stringify(req));
     });
 
     it("getRequestMessage:listen",()=>{
-        // {"jsonrpc":"2.0","method":"listen","params":[{"type":"JSON_RPC_CALLBACK","id":1}],"id":1,"service":"hello-world"}
+        // {"jsonrpc":"2.0","method":"listen","params":[{"type":"JSON_RPC_CALLBACK","id":188}],"id":199,"service":"hello-world"}
         let msg = new Message();
         let req = msg.getRequestMessage("listen",[jest.fn((v)=>{console.log(v);})],"hello-world");
         expect(req.method).toEqual("listen");
-        //console.log("v:",JSON.stringify(req));
+        console.log("v:",JSON.stringify(req));
     });
 
     // 握手
