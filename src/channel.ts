@@ -1,32 +1,33 @@
-import { Device, getDevice } from './utils'
+import { getPlatform } from './utils'
+import {Platform,Device} from './enum'
 import AppChannel from './app_channel'
 import PcChannel from './pc_channel';
 import Message from './message'
 
-let Config = {
-  port: 52384,
-  host: '127.0.0.1',
-};
-
 class LinkChannel {
-  private device: Device = Device.PC;
   private app: AppChannel = new AppChannel();
   private pc: PcChannel = new PcChannel();
   private msg: Message = new Message();
+  public handleClientMessage: any = null;// 发回client的消息
+  // config
+  Config: any = {
+    PC:{ port: 52384,host: '127.0.0.1'} ,
+    APP:{ device:Device.auto},
+    platform: Platform.auto
+  };
+
   constructor(autoInit: boolean = true) {
     if (autoInit) this.init();
   }
 
-  init(port: number = Config.port, host: string = Config.host) {
-    this.device = getDevice();
-    if (this.device == Device.APP) {
+  init() {
+    this.Config.platform = getPlatform();
+    if (this.Config.platform == Platform.app) {
       this.app.init();
-      this.app.setHandle(this.handleMessage)
+      this.app.setHandle(this._handleMessage)
     } else {
-      if (port != Config.port) Config.port = port;
-      if (host != Config.host) Config.host = host;
-      this.pc.init(port, host);
-      this.app.setHandle(this.handleMessage)
+      this.pc.init(this.Config.PC.port, this.Config.PC.host);
+      this.app.setHandle(this._handleMessage)
     }
   }
 
@@ -43,7 +44,8 @@ class LinkChannel {
   }
 
   close() {
-    if (this.device == Device.APP) {
+    this.handleClientMessage =null;
+    if (this.Config.platform == Platform.app) {
       this.app.close();
     } else {
       this.pc.close();
@@ -52,22 +54,27 @@ class LinkChannel {
   }
 
   callServer(jsonrpc: any = {}) {
-    if (this.device == Device.APP) {
+    if (this.Config.platform == Platform.app) {
       this.app.callServer(jsonrpc)
     } else {
       this.pc.callServer(jsonrpc)
     }
   }
 
-  handleMessage(v: any) {
-    console.log("[client]handleMessage:", v);
+  _handleMessage(v: any) {
+    console.log("[client]_handleMessage:", v);
     const data = JSON.parse(v);
     const res = this.msg.handleMessage(data);
-    if (res.flag === "hasMethod") { // 循环请求
-      const { method, params, id, server } = res.message;
-      this.send(method, params, server, id);
+    if (res.flag === "hasMethod") { // server主动请求Client中的方法
+      //const { method, params, id, server } = res.message;
+      //this.send(method, params, server, id);
+      if(this.handleClientMessage) this.handleClientMessage({"type":"data",data:res.message});
     }
     console.log("result:", res);
+  }
+
+  setHandle(handle: any) {
+    this.handleClientMessage = handle;
   }
 
   refresh() {
