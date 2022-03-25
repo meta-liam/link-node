@@ -1,4 +1,4 @@
-import LinkChannel from "../channel";
+import LinkChannel from "../index";
 
 //let Client = require("../index");
 // client = client.default;

@@ -2,7 +2,7 @@ import { getPlatform } from './utils'
 import { Platform, Device } from './enum'
 import AppChannel from './app_channel'
 import PcChannel from './pc_channel';
-import Message  from './message'
+import Message from './message'
 
 class LinkChannel {
   app: AppChannel = new AppChannel();
@@ -21,13 +21,14 @@ class LinkChannel {
   }
 
   init() {
+    console.log("[INFO][channel]init:");
     if (this.Config.platform == Platform.auto) this.Config.platform = getPlatform();
     if (this.Config.platform == Platform.app) {
+      this.app.setHandle(this._handleMessage);
       this.app.init(this.Config.APP.device);
-      this.app.setHandle(this._handleMessage)
     } else {
+      this.pc.setHandle(this._handleMessage);
       this.pc.init(this.Config.PC.port, this.Config.PC.host);
-      this.app.setHandle(this._handleMessage)
     }
   }
 
@@ -62,19 +63,16 @@ class LinkChannel {
     }
   }
 
-  _handleMessage(v: string) {
-    //console.log("[client]_handleMessage:", v);
-    if (!this.handleClientMessage){
-      return false;
-    }
+  _handleMessage = (v: any) => {
+    console.log("[INFO][channel]_handleMessage:", v);
     if (!v || v.indexOf("jsonrpc") == -1) {
-      this.handleClientMessage({ "type": "error", data: v });
+      if (this.handleClientMessage) this.handleClientMessage({ "type": "error", data: v });
       return false;
     }
     const data = JSON.parse(v);
     const res = this.msg.handleMessage(data);
-    this.handleClientMessage({ "type": res.flag, data: res.message });
-    //console.log("result:", res);
+    if (this.handleClientMessage) this.handleClientMessage({ "type": res.flag, data: res.message });
+    console.log("[INFO][channel]_handleMessage:res:", res);
     return true;
   }
 

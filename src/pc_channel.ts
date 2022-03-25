@@ -13,6 +13,7 @@ class PcChannel {
   }
 
   init(port: number = this.config.port, host: string = this.config.host, autoConnect: boolean = true) {
+    console.log("[INFO][pc.init]");
     if (port != this.config.port) this.config.port = port;
     if (host != this.config.host) this.config.host = host;
     if (autoConnect) this.connect();
@@ -28,7 +29,7 @@ class PcChannel {
         data = jsonrpc;
       }
       this.wsClient.send(data);
-      //console.log("callServer:", data);
+      console.log("[INFO][pc.send]:", data);
     }
   }
 
@@ -37,6 +38,7 @@ class PcChannel {
   }
 
   close() {
+    console.log("[INFO][PC]close:");
     if (!this.connected) {
       return;
     }
@@ -47,10 +49,6 @@ class PcChannel {
       this.wsClient = null;
     }
   }
-
-  // callBack(v:string){
-  //     console.log("callBackFromApp:",v);
-  // }
 
   async connect(websocket: WebSocket = null) {
     if (websocket && typeof websocket === 'object') {
@@ -104,31 +102,40 @@ class PcChannel {
   }
 
   private handleSocketMessage = (event: MessageEvent) => {
-    console.log("[INFO]handleSocketMessage:", event.data);
+    console.log("[INFO][pc.handleSocketMessage]:", event.data);
     try {
-      const data = event.data;// JSON.parse(event.data);
-      //this._handleMessage(data);
+      const data = event.data;
       if (this.handleMessage) {
         this.handleMessage(data);
       }
     } catch (error) {
-      console.log("[ERROR]handleSocketMessage:", error);
+      console.log("[ERROR][pc.handleSocketMessage]:", error);
     }
   };
 
+  /**测试中发现open,close都触发 */
   private handleSocketClose = (event: MessageEvent) => {
-    console.log("[handleSocketClose]", event.type);
-    this.close();
+    console.log("[INFO][pc.handleSocketEvent]type=", event.type);
+    if (event.type =="open" && this.wsClient.readyState){
+      this.socketOpenInit();
+    }
+    if (event.type =="close"){
+      this.close();
+    }
   }
 
   private handleSocketError = (err: any) => {
-    console.log("[handleSocketError]", err);
+    console.log("[INFO][pc.handleSocketError]", err);
+  }
+
+  socketOpenInit(){
+      this.connected = true;
   }
 
   private handleSocketOpen = (event: MessageEvent) => {
-    console.log("[handleSocketOpen]", event);
+    console.log("[INFO][pc.handleSocketOpen]", event);
     if (this.wsClient.readyState) {
-      this.connected = true;
+      this.socketOpenInit();
     } else {
       this.removeEventListener(this.wsClient);
       this.connected = false;
