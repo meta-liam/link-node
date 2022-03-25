@@ -28,6 +28,9 @@ chmod a+x ./build-mac.sh && ./build-mac.sh
 先改好版本号,构建npm包,再执行发布命令便可。
 
 ```shell
+nrm ls
+nrm use xxx
+
 cd ./
 chmod a+x ./build-mac.sh && ./build-mac.sh
 npm publish

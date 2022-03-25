@@ -1,7 +1,7 @@
 {
     "name": "link-node",
-    "version": "1.0.0",
-    "description": "",
+    "version": "1.0.2",
+    "description": "link node",
     "main": "dist/index.js",
     "scripts": {
         "build": "tsc -p ./tsconfig.json",
@@ -9,11 +9,13 @@
         "test:coverage": "jest --coverage"
     },
     "files": [
-        "dist/*"
+        "dist/*",
+        "README.md"
     ],
     "dependencies": {
         "@makeblock/xlink-rpc": "^0.1.1"
     },
+    "keywords": ["link","app","demo","liam","meta","h5"],
     "author": "liam",
     "license": "MIT",
     "devDependencies": {
