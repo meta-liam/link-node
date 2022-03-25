@@ -96,19 +96,17 @@ describe("pc_client:", () => {
   });
 
   it("listenSocketEvents:", async () => {
-    let mockServer2 = new WS("ws://localhost:21315");
-    let mockClient2 = new WebSocket("ws://localhost:21315");
+    let mockServer2 = new WS("ws://localhost:20315");
+    let mockClient2 = new WebSocket("ws://localhost:20315");
+    await mockServer2.connected;
     let client2 = new PcChannel();
     client2.initSocket(mockClient2)
-    //client2.listenSocketEvents(mockClient2);
-    await mockServer2.connected;
-    //expect(v).not.toEqual(null);
     return new Promise(res => {
       setTimeout(async () => {
         //console.log("connected:",client2.connected);
         expect(client2.connected).toEqual(true);
         res(1);
-      }, 100);
+      }, 82);
     });
   });
 

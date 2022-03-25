@@ -24,7 +24,6 @@ describe("Unity:pc", () => {
 
   const loadServer = async () => {
     let handleClientMessage = (v: any) => {
-      //console.log("-------------------------handleClientMessage");
       console.log("[TEST]handleClientMessage:::", v);
     };
     channel.setHandle(handleClientMessage);
@@ -34,10 +33,9 @@ describe("Unity:pc", () => {
   };
 
   it("pc:service-global.init", async () => {
-    //console.log(channel)
     //let r = {"jsonrpc":"2.0","method":"say","params":["liam"],"id":199,"service":"hello-world"};
     let r = { "jsonrpc": "2.0", "method": "init", "params": ["{}"], "id": 199, "service": "service-global" };
-    let result = await channel.send(r.method, r.params, r.service);
+    let result = channel.send(r.method, r.params, r.service);
     console.log('result::', result);
 
     let wait = new Promise<boolean>((resolve) => {
@@ -50,7 +48,7 @@ describe("Unity:pc", () => {
 
   it("pc:service-global.getVersion", async () => {
     let r = { "jsonrpc": "2.0", "method": "getVersion", "params": [""], "id": 199, "service": "service-global" };
-    let result = await channel.send(r.method, r.params, r.service);
+    let result = channel.send(r.method, r.params, r.service);
     console.log('result::', result);
     let wait = new Promise<boolean>((resolve) => {
       setTimeout(() => {
@@ -62,7 +60,7 @@ describe("Unity:pc", () => {
 
   it("pc:service-global.close", async () => {
     let r = { "jsonrpc": "2.0", "method": "close", "params": [""], "id": 199, "service": "service-global" };
-    let result = await channel.send(r.method, r.params, r.service);
+    let result = channel.send(r.method, r.params, r.service);
     console.log('result::', result);
     let wait = new Promise<boolean>((resolve) => {
       setTimeout(() => {
@@ -74,7 +72,7 @@ describe("Unity:pc", () => {
 
   it("pc:service-global.askAndAnswer", async () => {
     let r = { "jsonrpc": "2.0", "method": "askAndAnswer", "params": ["liam", { "type": "JSON_RPC_CALLBACK", "id": 188 }], "id": 199, "service": "service-global" };
-    let result = await channel.send(r.method, r.params, r.service);
+    let result = channel.send(r.method, r.params, r.service);
     console.log('result::', result);
     let wait = new Promise<boolean>((resolve) => {
       setTimeout(() => {
@@ -86,7 +84,7 @@ describe("Unity:pc", () => {
 
   it("pc:service-global.listen", async () => {
     let r = { "jsonrpc": "2.0", "method": "listen", "params": [{ "type": "JSON_RPC_CALLBACK", "id": 188 }, 2, 10], "id": 199, "service": "service-global" };
-    let result = await channel.send(r.method, r.params, r.service);
+    let result = channel.send(r.method, r.params, r.service);
     console.log('result::', result);
     let wait = new Promise<boolean>((resolve) => {
       setTimeout(() => {
@@ -99,7 +97,6 @@ describe("Unity:pc", () => {
 });
 
 
-describe("Unity:pc", () => {
+// describe("Unity:app", () => {
 
-
-});
+// });

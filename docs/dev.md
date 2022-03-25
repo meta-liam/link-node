@@ -9,8 +9,6 @@ npm i --registry=https://registry.npmmirror.com
 
 npm run build
 
-npm run dev
-
 ```
 
 ## test
@@ -20,7 +18,7 @@ npm run test:coverage
 ## 构建npm包
 
 ```shell mac
-chmod a+x ./build-mac.sh && ./build-mac.sh
+npm run build
 ```
 
 ## 发布
@@ -32,13 +30,12 @@ nrm ls
 nrm use xxx
 
 cd ./
-chmod a+x ./build-mac.sh && ./build-mac.sh
+
 npm publish
 
 ```
 
 ## 参考文档
-
 
 ## 问题
 

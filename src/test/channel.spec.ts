@@ -1,8 +1,5 @@
 import LinkChannel from "../index";
 
-//let Client = require("../index");
-// client = client.default;
-
 describe("Index", () => {
   //let client = new LinkChannel();
 

@@ -1,7 +1,7 @@
 {
     "name": "link-node",
-    "version": "1.0.4",
-    "description": "link node",
+    "version": "1.0.5",
+    "description": "link pc,ios,android by node.",
     "main": "dist/index.js",
     "scripts": {
         "build": "tsc -p ./tsconfig.json",
@@ -13,10 +13,9 @@
         "README.md"
     ],
     "dependencies": {
-        "@makeblock/xlink-rpc": "^0.1.1"
     },
     "keywords": ["link","app","demo","liam","meta","h5"],
-    "author": "liam",
+    "author": "liam168520@gmain.com",
     "license": "MIT",
     "devDependencies": {
         "@types/jest": "^27.4.0",
